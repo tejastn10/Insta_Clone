@@ -1,5 +1,5 @@
-import 'package:Insta_Clone/screens/login.dart';
-import 'package:Insta_Clone/screens/signup.dart';
+import 'package:Insta_Clone/screens/auth/login.dart';
+import 'package:Insta_Clone/screens/auth/signup.dart';
 import 'package:flutter/material.dart';
 
 void main() {

@@ -1,4 +1,4 @@
-import 'package:Insta_Clone/screens/login.dart';
+import 'package:Insta_Clone/screens/auth/login.dart';
 import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
