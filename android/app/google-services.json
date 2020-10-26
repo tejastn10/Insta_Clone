@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "644084359498",
+    "firebase_url": "https://insta-clone-63d87.firebaseio.com",
+    "project_id": "insta-clone-63d87",
+    "storage_bucket": "insta-clone-63d87.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644084359498:android:c918e493b4d2d71f05e1b3",
+        "android_client_info": {
+          "package_name": "com.example.Insta_Clone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "644084359498-nc636dmllntsqpjl2e8s41jq62t87t70.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMc1g-XQXjVJjLpiYc36wypkjH4YO8d9g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "644084359498-nc636dmllntsqpjl2e8s41jq62t87t70.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
