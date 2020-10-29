@@ -1,4 +1,5 @@
 import 'package:Insta_Clone/screens/auth/signup.dart';
+import 'package:Insta_Clone/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -10,12 +11,12 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _formkey = GlobalKey<FormState>();
-  String _name, _email, _password;
+  String _email, _password;
 
   _submit() {
     if (_formkey.currentState.validate()) {
       _formkey.currentState.save();
-      print({_password, _email, _name});
+      Auth.login(_email, _password);
     }
   }
 
@@ -41,17 +42,6 @@ class _LoginState extends State<Login> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30.0, vertical: 10.0),
-                      child: TextFormField(
-                        decoration: InputDecoration(labelText: "Name"),
-                        validator: (input) => input.trim().isEmpty
-                            ? "Please enter a valid Name!"
-                            : null,
-                        onSaved: (input) => _name = input,
-                      ),
-                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 30.0, vertical: 10.0),
