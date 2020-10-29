@@ -1,3 +1,8 @@
+import 'package:Insta_Clone/screens/pages/activity.dart';
+import 'package:Insta_Clone/screens/pages/create_post.dart';
+import 'package:Insta_Clone/screens/pages/feed.dart';
+import 'package:Insta_Clone/screens/pages/profile.dart';
+import 'package:Insta_Clone/screens/pages/search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +39,18 @@ class _HomeState extends State<Home> {
       ),
       body: PageView(
         controller: _pageController,
-        children: <Widget>[],
+        children: <Widget>[
+          Feed(),
+          Search(),
+          CreatePost(),
+          Activity(),
+          Profile(),
+        ],
+        onPageChanged: (int index) {
+          setState(() {
+            _currentTab = index;
+          });
+        },
       ),
       bottomNavigationBar: CupertinoTabBar(
         currentIndex: _currentTab,
@@ -42,6 +58,8 @@ class _HomeState extends State<Home> {
           setState(() {
             _currentTab = index;
           });
+          _pageController.animateToPage(index,
+              duration: Duration(microseconds: 200), curve: Curves.easeIn);
         },
         activeColor: Colors.black,
         items: [
