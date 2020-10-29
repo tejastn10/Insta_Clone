@@ -14,8 +14,8 @@ class _FeedState extends State<Feed> {
     return Scaffold(
       backgroundColor: Colors.red,
       body: Center(
-        child: FlatButton(
-            onPressed: () => Auth.logout(context), child: Text("Logout")),
+        child:
+            FlatButton(onPressed: () => Auth.logout(), child: Text("Logout")),
       ),
     );
   }
