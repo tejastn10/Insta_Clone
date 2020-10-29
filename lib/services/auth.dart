@@ -1,4 +1,4 @@
-import 'package:Insta_Clone/screens/feed.dart';
+import 'package:Insta_Clone/screens/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
@@ -24,7 +24,7 @@ class Auth {
           'profileImageURL': '',
         });
 
-        Navigator.pushReplacementNamed(context, Feed.id);
+        Navigator.pushReplacementNamed(context, Home.id);
       }
     } catch (e) {
       print(e);
