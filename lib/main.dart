@@ -17,7 +17,9 @@ class MyApp extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (BuildContext context, snapshot) {
         if (snapshot.hasData) {
-          return Home();
+          return Home(
+            userId: snapshot.data.uid,
+          );
         } else {
           return Login();
         }
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
       routes: {
         Login.id: (context) => Login(),
         SignUp.id: (context) => SignUp(),
-        Home.id: (context) => Home()
+        Home.id: (context) => Home(),
       },
     );
   }

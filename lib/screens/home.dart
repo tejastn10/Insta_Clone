@@ -9,6 +9,10 @@ import 'package:flutter/material.dart';
 class Home extends StatefulWidget {
   static final String id = "home";
 
+  final String userId;
+
+  Home({this.userId});
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -44,7 +48,9 @@ class _HomeState extends State<Home> {
           Search(),
           CreatePost(),
           Activity(),
-          Profile(),
+          Profile(
+            userId: widget.userId,
+          ),
         ],
         onPageChanged: (int index) {
           setState(() {
