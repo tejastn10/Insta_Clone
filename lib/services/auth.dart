@@ -22,6 +22,7 @@ class Auth {
           'name': name,
           'email': email,
           'profileImageURL': '',
+          'bio': '',
         });
 
         Navigator.pushReplacementNamed(context, Home.id);
