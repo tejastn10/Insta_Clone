@@ -1,3 +1,5 @@
+import 'package:Insta_Clone/models/user.dart';
+import 'package:Insta_Clone/utilities/constants.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {
@@ -14,118 +16,131 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 50.0,
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: FutureBuilder(
+        future: usersRef.doc(widget.userId).get(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          User user = User.fromDoc(snapshot.data);
+
+          return ListView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 50.0,
+                    ),
+                    Expanded(
+                      child: Column(
                         children: [
-                          Column(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Text(
-                                "12",
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                              Column(
+                                children: [
+                                  Text(
+                                    "12",
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    "posts",
+                                    style: TextStyle(color: Colors.black54),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                "posts",
-                                style: TextStyle(color: Colors.black54),
+                              Column(
+                                children: [
+                                  Text(
+                                    "120",
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    "following",
+                                    style: TextStyle(color: Colors.black54),
+                                  ),
+                                ],
                               ),
+                              Column(
+                                children: [
+                                  Text(
+                                    "98",
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    "followers",
+                                    style: TextStyle(color: Colors.black54),
+                                  ),
+                                ],
+                              )
                             ],
                           ),
-                          Column(
-                            children: [
-                              Text(
-                                "120",
+                          Container(
+                            width: 200.0,
+                            child: FlatButton(
+                              color: Colors.blue,
+                              child: Text(
+                                "Edit Profile",
                                 style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                    fontSize: 16.0, color: Colors.white),
                               ),
-                              Text(
-                                "following",
-                                style: TextStyle(color: Colors.black54),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                "98",
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                "followers",
-                                style: TextStyle(color: Colors.black54),
-                              ),
-                            ],
+                              onPressed: () => print("Edit Profile"),
+                            ),
                           )
                         ],
                       ),
-                      Container(
-                        width: 200.0,
-                        child: FlatButton(
-                          color: Colors.blue,
-                          child: Text(
-                            "Edit Profile",
-                            style:
-                                TextStyle(fontSize: 16.0, color: Colors.white),
-                          ),
-                          onPressed: () => print("Edit Profile"),
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 30.0,
-              vertical: 10.0,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Username",
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                  ),
+                    )
+                  ],
                 ),
-                SizedBox(
-                  height: 5.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 30.0,
+                  vertical: 10.0,
                 ),
-                Container(
-                  height: 80.0,
-                  child: Text(
-                    "Bio",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w300,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user.name,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    Container(
+                      height: 80.0,
+                      child: Text(
+                        user.bio,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ),
+                    Divider()
+                  ],
                 ),
-                Divider()
-              ],
-            ),
-          )
-        ],
+              )
+            ],
+          );
+        },
       ),
     );
   }
