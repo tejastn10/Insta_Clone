@@ -1,4 +1,5 @@
 import 'package:Insta_Clone/models/user.dart';
+import 'package:Insta_Clone/screens/extras/edit_profile.dart';
 import 'package:Insta_Clone/utilities/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -98,7 +99,14 @@ class _ProfileState extends State<Profile> {
                                 style: TextStyle(
                                     fontSize: 16.0, color: Colors.white),
                               ),
-                              onPressed: () => print("Edit Profile"),
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => EditProfile(
+                                    user: user,
+                                  ),
+                                ),
+                              ),
                             ),
                           )
                         ],
