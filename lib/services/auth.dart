@@ -1,4 +1,3 @@
-import 'package:Insta_Clone/screens/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
@@ -25,7 +24,7 @@ class Auth {
           'bio': '',
         });
 
-        Navigator.pushReplacementNamed(context, Home.id);
+        Navigator.pop(context);
       }
     } catch (e) {
       print(e);
