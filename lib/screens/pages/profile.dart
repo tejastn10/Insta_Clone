@@ -1,6 +1,7 @@
 import 'package:Insta_Clone/models/user.dart';
 import 'package:Insta_Clone/screens/extras/edit_profile.dart';
 import 'package:Insta_Clone/utilities/constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {
@@ -36,6 +37,10 @@ class _ProfileState extends State<Profile> {
                   children: [
                     CircleAvatar(
                       radius: 50.0,
+                      backgroundColor: Colors.grey,
+                      backgroundImage: user.profileImageURL.isEmpty
+                          ? AssetImage('assets/images/default_user_image.jpg')
+                          : CachedNetworkImage(imageUrl: user.profileImageURL),
                     ),
                     Expanded(
                       child: Column(
