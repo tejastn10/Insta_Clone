@@ -1,3 +1,4 @@
+import 'package:Insta_Clone/models/user_data.dart';
 import 'package:Insta_Clone/screens/pages/activity.dart';
 import 'package:Insta_Clone/screens/pages/create_post.dart';
 import 'package:Insta_Clone/screens/pages/feed.dart';
@@ -5,13 +6,10 @@ import 'package:Insta_Clone/screens/pages/profile.dart';
 import 'package:Insta_Clone/screens/pages/search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   static final String id = "home";
-
-  final String userId;
-
-  Home({this.userId});
 
   @override
   _HomeState createState() => _HomeState();
@@ -29,18 +27,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    print(Provider.of<UserData>(context).currentUserId);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          "Instagram",
-          style: TextStyle(
-            color: Colors.black,
-            fontFamily: 'Billabong',
-            fontSize: 35.0,
-          ),
-        ),
-      ),
       body: PageView(
         controller: _pageController,
         children: <Widget>[
@@ -49,7 +37,7 @@ class _HomeState extends State<Home> {
           CreatePost(),
           Activity(),
           Profile(
-            userId: widget.userId,
+            userId: Provider.of<UserData>(context).currentUserId,
           ),
         ],
         onPageChanged: (int index) {

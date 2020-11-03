@@ -1,6 +1,8 @@
+import 'package:Insta_Clone/models/user_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 class Auth {
   static final _auth = FirebaseAuth.instance;
@@ -23,7 +25,7 @@ class Auth {
           'profileImageURL': '',
           'bio': '',
         });
-
+        Provider.of<UserData>(context).currentUserId = signedinUser.uid;
         Navigator.pop(context);
       }
     } catch (e) {

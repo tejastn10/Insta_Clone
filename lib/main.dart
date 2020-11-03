@@ -1,9 +1,11 @@
+import 'package:Insta_Clone/models/user_data.dart';
 import 'package:Insta_Clone/screens/auth/login.dart';
 import 'package:Insta_Clone/screens/auth/signup.dart';
 import 'package:Insta_Clone/screens/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,9 +19,8 @@ class MyApp extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (BuildContext context, snapshot) {
         if (snapshot.hasData) {
-          return Home(
-            userId: snapshot.data.uid,
-          );
+          Provider.of<UserData>(context).currentUserId = snapshot.data.uid;
+          return Home();
         } else {
           return Login();
         }
@@ -29,15 +30,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Instagram Clone',
-      debugShowCheckedModeBanner: false,
-      home: _getScreenId(),
-      routes: {
-        Login.id: (context) => Login(),
-        SignUp.id: (context) => SignUp(),
-        Home.id: (context) => Home(),
-      },
+    return ChangeNotifierProvider(
+      create: (context) => UserData(),
+      child: MaterialApp(
+        title: 'Instagram Clone',
+        debugShowCheckedModeBanner: false,
+        home: _getScreenId(),
+        routes: {
+          Login.id: (context) => Login(),
+          SignUp.id: (context) => SignUp(),
+          Home.id: (context) => Home(),
+        },
+      ),
     );
   }
 }
