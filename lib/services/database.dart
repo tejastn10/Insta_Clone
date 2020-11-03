@@ -6,7 +6,7 @@ class Database {
     usersRef.doc(user.id).update({
       "name": user.name,
       "bio": user.bio,
-      "photoImageURL": user.profileImageURL,
+      "profileImageURL": user.profileImageURL,
     });
   }
 }
