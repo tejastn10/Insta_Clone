@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:Insta_Clone/models/user.dart';
 import 'package:Insta_Clone/services/database.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfile extends StatefulWidget {
   final User user;
@@ -13,6 +17,8 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   final _formkey = GlobalKey<FormState>();
+  final ImagePicker _picker = ImagePicker();
+  File _profileImage;
   String _name, _bio = "";
 
   @override
@@ -20,6 +26,28 @@ class _EditProfileState extends State<EditProfile> {
     super.initState();
     _name = widget.user.name;
     _bio = widget.user.bio;
+  }
+
+  Future _handleImageFromGallery() async {
+    final imageFile = await _picker.getImage(source: ImageSource.gallery);
+
+    if (imageFile != null) {
+      setState(() {
+        _profileImage = File(imageFile.path);
+      });
+    }
+  }
+
+  _displayProfileImage() {
+    if (_profileImage == null) {
+      if (widget.user.profileImageURL.isEmpty) {
+        return AssetImage("assets/images/default_user_image.jpg");
+      } else {
+        return CachedNetworkImageProvider(widget.user.profileImageURL);
+      }
+    } else {
+      return FileImage(_profileImage);
+    }
   }
 
   _submit() {
@@ -63,9 +91,11 @@ class _EditProfileState extends State<EditProfile> {
                 children: [
                   CircleAvatar(
                     radius: 60.0,
+                    backgroundColor: Colors.grey,
+                    backgroundImage: _displayProfileImage(),
                   ),
                   FlatButton(
-                    onPressed: () => print("Change Profile image"),
+                    onPressed: () => _handleImageFromGallery(),
                     child: Text(
                       "Change Profile Image",
                       style: TextStyle(
