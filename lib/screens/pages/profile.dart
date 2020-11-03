@@ -40,7 +40,7 @@ class _ProfileState extends State<Profile> {
                       backgroundColor: Colors.grey,
                       backgroundImage: user.profileImageURL.isEmpty
                           ? AssetImage('assets/images/default_user_image.jpg')
-                          : CachedNetworkImage(imageUrl: user.profileImageURL),
+                          : CachedNetworkImageProvider(user.profileImageURL),
                     ),
                     Expanded(
                       child: Column(
