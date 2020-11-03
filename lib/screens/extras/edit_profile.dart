@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:Insta_Clone/models/user.dart';
 import 'package:Insta_Clone/services/database.dart';
+import 'package:Insta_Clone/services/storage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,6 +21,7 @@ class _EditProfileState extends State<EditProfile> {
   final ImagePicker _picker = ImagePicker();
   File _profileImage;
   String _name, _bio = "";
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -50,12 +52,24 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
-  _submit() {
+  _submit() async {
     if (_formkey.currentState.validate()) {
       _formkey.currentState.save();
 
+      setState(() {
+        _isLoading = true;
+      });
+
       // * Update user in database
       String _profileImageURL = "";
+      if (_profileImage == null) {
+        _profileImageURL = widget.user.profileImageURL;
+      } else {
+        _profileImageURL = await Storage.uploadUserProfileImage(
+          widget.user.profileImageURL,
+          _profileImage,
+        );
+      }
       User user = User(
         id: widget.user.id,
         name: _name,
@@ -80,79 +94,87 @@ class _EditProfileState extends State<EditProfile> {
           style: TextStyle(color: Colors.black),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          child: Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: Form(
-              key: _formkey,
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 60.0,
-                    backgroundColor: Colors.grey,
-                    backgroundImage: _displayProfileImage(),
-                  ),
-                  FlatButton(
-                    onPressed: () => _handleImageFromGallery(),
-                    child: Text(
-                      "Change Profile Image",
-                      style: TextStyle(
-                        color: Theme.of(context).accentColor,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                  ),
-                  TextFormField(
-                    initialValue: _name,
-                    style: TextStyle(
-                      fontSize: 18.0,
-                    ),
-                    decoration: InputDecoration(
-                        icon: Icon(
-                          Icons.person,
-                          size: 30.0,
-                        ),
-                        labelText: "Name"),
-                    validator: (input) => input.trim().length < 1
-                        ? "Please enter valid name"
-                        : null,
-                    onSaved: (input) => _name = input,
-                  ),
-                  TextFormField(
-                    initialValue: _bio,
-                    style: TextStyle(
-                      fontSize: 18.0,
-                    ),
-                    decoration: InputDecoration(
-                        icon: Icon(
-                          Icons.book,
-                          size: 30.0,
-                        ),
-                        labelText: "Bio"),
-                    validator: (input) => input.trim().length > 140
-                        ? "Limit exceeded! Please keep upto 140 characters"
-                        : null,
-                    onSaved: (input) => _bio = input,
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(40.0),
-                    height: 40.0,
-                    width: 250.0,
-                    child: FlatButton(
-                      onPressed: _submit,
-                      color: Colors.blue,
-                      child: Text(
-                        "Save Profile",
-                        style: TextStyle(fontSize: 18.0, color: Colors.white),
-                      ),
-                    ),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: ListView(
+          children: [
+            _isLoading
+                ? LinearProgressIndicator(
+                    backgroundColor: Colors.blue[200],
+                    valueColor: AlwaysStoppedAnimation(Colors.blue),
                   )
-                ],
+                : SizedBox.shrink(),
+            Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Form(
+                key: _formkey,
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 60.0,
+                      backgroundColor: Colors.grey,
+                      backgroundImage: _displayProfileImage(),
+                    ),
+                    FlatButton(
+                      onPressed: () => _handleImageFromGallery(),
+                      child: Text(
+                        "Change Profile Image",
+                        style: TextStyle(
+                          color: Theme.of(context).accentColor,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
+                    TextFormField(
+                      initialValue: _name,
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
+                      decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.person,
+                            size: 30.0,
+                          ),
+                          labelText: "Name"),
+                      validator: (input) => input.trim().length < 1
+                          ? "Please enter valid name"
+                          : null,
+                      onSaved: (input) => _name = input,
+                    ),
+                    TextFormField(
+                      initialValue: _bio,
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
+                      decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.book,
+                            size: 30.0,
+                          ),
+                          labelText: "Bio"),
+                      validator: (input) => input.trim().length > 140
+                          ? "Limit exceeded! Please keep upto 140 characters"
+                          : null,
+                      onSaved: (input) => _bio = input,
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(40.0),
+                      height: 40.0,
+                      width: 250.0,
+                      child: FlatButton(
+                        onPressed: _submit,
+                        color: Colors.blue,
+                        child: Text(
+                          "Save Profile",
+                          style: TextStyle(fontSize: 18.0, color: Colors.white),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
