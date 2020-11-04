@@ -28,7 +28,7 @@ class _FeedState extends State<Feed> {
             style: TextStyle(color: Colors.white),
           ),
           color: Colors.black,
-          onPressed: Auth.logout,
+          onPressed: () => Auth.logout(),
         ),
       ),
     );
