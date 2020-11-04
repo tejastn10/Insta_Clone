@@ -33,6 +33,11 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => UserData(),
       child: MaterialApp(
+        theme: ThemeData(
+          primaryIconTheme: Theme.of(context).primaryIconTheme.copyWith(
+                color: Colors.black,
+              ),
+        ),
         title: 'Instagram Clone',
         debugShowCheckedModeBanner: false,
         home: _getScreenId(),
