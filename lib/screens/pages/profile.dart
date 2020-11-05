@@ -1,15 +1,16 @@
 import 'package:Insta_Clone/models/user.dart';
 import 'package:Insta_Clone/models/user_data.dart';
 import 'package:Insta_Clone/screens/extras/edit_profile.dart';
+import 'package:Insta_Clone/services/database.dart';
 import 'package:Insta_Clone/utilities/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Profile extends StatefulWidget {
-  final String userId;
+  final String userId, currentUserID;
 
-  Profile({this.userId});
+  Profile({this.userId, this.currentUserID});
 
   @override
   _ProfileState createState() => _ProfileState();
@@ -19,6 +20,69 @@ class _ProfileState extends State<Profile> {
   bool isFollowing = false;
   int followerCount = 0;
   int followingCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _setupIsFollowing();
+    _setupFollowing();
+    _setupFollowers();
+  }
+
+  _setupIsFollowing() async {
+    bool isFollowingUser = await Database.isFollowingUser(
+      currentUserId: widget.currentUserID,
+      userId: widget.userId,
+    );
+
+    setState(() {
+      isFollowing = isFollowingUser;
+    });
+  }
+
+  _setupFollowers() async {
+    int userFollowercount = await Database.numFollowers(widget.userId);
+    setState(() {
+      followerCount = userFollowercount;
+    });
+  }
+
+  _setupFollowing() async {
+    int userFollowingCount = await Database.numFollowing(widget.userId);
+    setState(() {
+      followingCount = userFollowingCount;
+    });
+  }
+
+  _followOrUnfollow() {
+    if (isFollowing) {
+      _unfollowUser();
+    } else {
+      _followUser();
+    }
+  }
+
+  _unfollowUser() {
+    Database.unfollowUser(
+      currentUserId: widget.currentUserID,
+      userId: widget.userId,
+    );
+    setState(() {
+      isFollowing = false;
+      followerCount--;
+    });
+  }
+
+  _followUser() {
+    Database.followUser(
+      currentUserId: widget.currentUserID,
+      userId: widget.userId,
+    );
+    setState(() {
+      isFollowing = true;
+      followerCount++;
+    });
+  }
 
   _displayButton(User user) {
     return user.id == Provider.of<UserData>(context).currentUserId
@@ -54,7 +118,7 @@ class _ProfileState extends State<Profile> {
                   fontSize: 16.0,
                 ),
               ),
-              onPressed: () {},
+              onPressed: _followOrUnfollow,
             ),
           );
   }
@@ -122,7 +186,7 @@ class _ProfileState extends State<Profile> {
                               Column(
                                 children: [
                                   Text(
-                                    "120",
+                                    followingCount.toString(),
                                     style: TextStyle(
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.w600,
@@ -137,7 +201,7 @@ class _ProfileState extends State<Profile> {
                               Column(
                                 children: [
                                   Text(
-                                    "98",
+                                    followerCount.toString(),
                                     style: TextStyle(
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.w600,
