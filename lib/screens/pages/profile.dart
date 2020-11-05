@@ -1,8 +1,10 @@
 import 'package:Insta_Clone/models/user.dart';
+import 'package:Insta_Clone/models/user_data.dart';
 import 'package:Insta_Clone/screens/extras/edit_profile.dart';
 import 'package:Insta_Clone/utilities/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Profile extends StatefulWidget {
   final String userId;
@@ -14,6 +16,49 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  bool isFollowing = false;
+  int followerCount = 0;
+  int followingCount = 0;
+
+  _displayButton(User user) {
+    return user.id == Provider.of<UserData>(context).currentUserId
+        ? Container(
+            width: 200.0,
+            child: FlatButton(
+              color: Colors.blue,
+              child: Text(
+                "Edit Profile",
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => EditProfile(
+                    user: user,
+                  ),
+                ),
+              ),
+            ),
+          )
+        : Container(
+            width: 200.0,
+            child: FlatButton(
+              color: isFollowing ? Colors.grey[200] : Colors.blue,
+              textColor: isFollowing ? Colors.black : Colors.white,
+              child: Text(
+                isFollowing ? "Unfollow" : "Follow",
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+              onPressed: () {},
+            ),
+          );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,25 +151,7 @@ class _ProfileState extends State<Profile> {
                               )
                             ],
                           ),
-                          Container(
-                            width: 200.0,
-                            child: FlatButton(
-                              color: Colors.blue,
-                              child: Text(
-                                "Edit Profile",
-                                style: TextStyle(
-                                    fontSize: 16.0, color: Colors.white),
-                              ),
-                              onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => EditProfile(
-                                    user: user,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
+                          _displayButton(user),
                         ],
                       ),
                     )
