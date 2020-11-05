@@ -53,7 +53,7 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   _submit() async {
-    if (_formkey.currentState.validate()) {
+    if (_formkey.currentState.validate() && !_isLoading) {
       _formkey.currentState.save();
 
       setState(() {
