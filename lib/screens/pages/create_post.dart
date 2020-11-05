@@ -1,9 +1,15 @@
 import 'dart:io';
 
+import 'package:Insta_Clone/models/post.dart';
+import 'package:Insta_Clone/models/user_data.dart';
+import 'package:Insta_Clone/services/database.dart';
+import 'package:Insta_Clone/services/storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class CreatePost extends StatefulWidget {
   @override
@@ -94,6 +100,32 @@ class _CreatePostState extends State<CreatePost> {
     return croppedImage;
   }
 
+  _submit() async {
+    if (!_isLoading && _postImage != null && _caption.isNotEmpty) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      String imageUrl = await Storage.uploadPost(_postImage);
+      Post post = Post(
+        imageUrl: imageUrl,
+        caption: _caption,
+        likes: {},
+        authorId: Provider.of<UserData>(context, listen: false).currentUserId,
+        timestamp: Timestamp.fromDate(DateTime.now()),
+      );
+      Database.createPost(post);
+
+      _captionController.clear();
+
+      setState(() {
+        _caption = "";
+        _postImage = null;
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -111,7 +143,7 @@ class _CreatePostState extends State<CreatePost> {
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () => print("Submit"),
+            onPressed: _submit,
           )
         ],
       ),
@@ -122,6 +154,17 @@ class _CreatePostState extends State<CreatePost> {
             height: height,
             child: Column(
               children: [
+                _isLoading
+                    ? Padding(
+                        padding: EdgeInsets.only(
+                          bottom: 10.0,
+                        ),
+                        child: LinearProgressIndicator(
+                          backgroundColor: Colors.blue[200],
+                          valueColor: AlwaysStoppedAnimation(Colors.blue),
+                        ),
+                      )
+                    : SizedBox.shrink(),
                 GestureDetector(
                   onTap: _showSelectImageDialog,
                   child: Container(
