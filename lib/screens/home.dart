@@ -27,7 +27,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    print(Provider.of<UserData>(context).currentUserId);
     return Scaffold(
       body: PageView(
         controller: _pageController,
