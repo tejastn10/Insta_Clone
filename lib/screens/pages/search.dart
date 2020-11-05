@@ -1,9 +1,11 @@
 import 'package:Insta_Clone/models/user.dart';
+import 'package:Insta_Clone/models/user_data.dart';
 import 'package:Insta_Clone/screens/pages/profile.dart';
 import 'package:Insta_Clone/services/database.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -28,6 +30,7 @@ class _SearchState extends State<Search> {
         MaterialPageRoute(
           builder: (_) => Profile(
             userId: user.id,
+            currentUserID: Provider.of<UserData>(context).currentUserId,
           ),
         ),
       ),

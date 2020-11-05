@@ -27,6 +27,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final String currentUserId = Provider.of<UserData>(context).currentUserId;
     return Scaffold(
       body: PageView(
         controller: _pageController,
@@ -36,7 +37,8 @@ class _HomeState extends State<Home> {
           CreatePost(),
           Activity(),
           Profile(
-            userId: Provider.of<UserData>(context).currentUserId,
+            userId: currentUserId,
+            currentUserID: currentUserId,
           ),
         ],
         onPageChanged: (int index) {
