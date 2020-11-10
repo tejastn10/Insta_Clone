@@ -32,7 +32,9 @@ class _HomeState extends State<Home> {
       body: PageView(
         controller: _pageController,
         children: <Widget>[
-          Feed(),
+          Feed(
+            currentuserId: currentUserId,
+          ),
           Search(),
           CreatePost(),
           Activity(),
