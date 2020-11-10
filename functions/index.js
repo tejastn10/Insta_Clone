@@ -67,3 +67,5 @@ exports.onUploadPost = functions
         .set(snapshot.data());
     });
   });
+
+// TODO: Deploy Functions by enabling Billing
