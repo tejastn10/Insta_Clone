@@ -87,4 +87,27 @@ class Database {
 
     return followingSnapshot.docs.length;
   }
+
+  static Future<List<Post>> getFeedPosts(String userId) async {
+    QuerySnapshot feedSnapshot = await feedsRef
+        .doc(userId)
+        .collection("userFeed")
+        .orderBy("timestamp", descending: true)
+        .get();
+
+    List<Post> posts =
+        feedSnapshot.docs.map((doc) => Post.fromDoc(doc)).toList();
+
+    return posts;
+  }
+
+  static Future<User> getUserWithId(String userId) async {
+    DocumentSnapshot userDocSnapshot = await usersRef.doc(userId).get();
+
+    if (userDocSnapshot.exists) {
+      return User.fromDoc(userDocSnapshot);
+    }
+
+    return User();
+  }
 }
