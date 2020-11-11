@@ -101,6 +101,19 @@ class Database {
     return posts;
   }
 
+  static Future<List<Post>> getUserPosts(String userId) async {
+    QuerySnapshot userPostSnapshot = await postsRef
+        .doc(userId)
+        .collection("usersPosts")
+        .orderBy("timestamp", descending: true)
+        .get();
+
+    List<Post> posts =
+        userPostSnapshot.docs.map((doc) => Post.fromDoc(doc)).toList();
+
+    return posts;
+  }
+
   static Future<User> getUserWithId(String userId) async {
     DocumentSnapshot userDocSnapshot = await usersRef.doc(userId).get();
 
