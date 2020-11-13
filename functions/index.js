@@ -68,4 +68,30 @@ exports.onUploadPost = functions
     });
   });
 
+exports.onUpdatePost = functions
+  .document("/posts/{userId}/userPosts/{postId}")
+  .onUpdate(async (snapshot, context) => {
+    const userId = context.params.userId;
+    const postId = context.params.postId;
+    const newPostData = snapshot.after.data();
+    console.log(newPostData);
+
+    const userFollowersRef = admin
+      .collection("followers")
+      .doc(userId)
+      .collection("userFollowers");
+    const userFollowersSnapshot = await userFollowersRef.get();
+
+    userFollowersSnapshot.forEach(async (userDoc) => {
+      const postRef = admin
+        .collection("feeds")
+        .doc(userDoc.id)
+        .collection("userFeed");
+      const postDoc = await postRef.doc(postId).get();
+      if (postDoc.exists) {
+        postDoc.ref.update(newPostData);
+      }
+    });
+  });
+
 // TODO: Deploy Functions by enabling Billing
