@@ -290,7 +290,7 @@ class _ProfileState extends State<Profile> {
           context,
           MaterialPageRoute(
             builder: (_) => Comments(
-              postId: post.id,
+              post: post,
               likeCount: post.likeCount,
             ),
           ),

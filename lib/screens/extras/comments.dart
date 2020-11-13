@@ -1,4 +1,5 @@
 import 'package:Insta_Clone/models/comment.dart';
+import 'package:Insta_Clone/models/post.dart';
 import 'package:Insta_Clone/models/user.dart';
 import 'package:Insta_Clone/models/user_data.dart';
 import 'package:Insta_Clone/services/database.dart';
@@ -9,10 +10,10 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class Comments extends StatefulWidget {
-  final String postId;
+  final Post post;
   final int likeCount;
 
-  Comments({this.postId, this.likeCount});
+  Comments({this.post, this.likeCount});
 
   @override
   _CommentsState createState() => _CommentsState();
@@ -94,7 +95,7 @@ class _CommentsState extends State<Comments> {
                 if (_isCommenting) {
                   Database.commentOnPost(
                     currentUserID: currentUserId,
-                    postId: widget.postId,
+                    post: widget.post,
                     comment: _commentController.text,
                   );
                   _commentController.clear();
@@ -136,7 +137,7 @@ class _CommentsState extends State<Comments> {
           ),
           StreamBuilder(
             stream: commentsRef
-                .doc(widget.postId)
+                .doc(widget.post.id)
                 .collection("postComments")
                 .orderBy("timestamp", descending: true)
                 .snapshots(),

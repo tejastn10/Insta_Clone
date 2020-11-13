@@ -173,7 +173,7 @@ class _PostViewState extends State<PostView> {
                       context,
                       MaterialPageRoute(
                         builder: (_) => Comments(
-                          postId: widget.post.id,
+                          post: widget.post,
                           likeCount: widget.post.likeCount,
                         ),
                       ),
