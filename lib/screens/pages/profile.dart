@@ -1,6 +1,7 @@
 import 'package:Insta_Clone/models/post.dart';
 import 'package:Insta_Clone/models/user.dart';
 import 'package:Insta_Clone/models/user_data.dart';
+import 'package:Insta_Clone/screens/extras/comments.dart';
 import 'package:Insta_Clone/screens/extras/edit_profile.dart';
 import 'package:Insta_Clone/services/auth.dart';
 import 'package:Insta_Clone/services/database.dart';
@@ -284,9 +285,20 @@ class _ProfileState extends State<Profile> {
 
   _buildTilePost(Post post) {
     return GridTile(
-      child: Image(
-        image: CachedNetworkImageProvider(post.imageUrl),
-        fit: BoxFit.cover,
+      child: GestureDetector(
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => Comments(
+              postId: post.id,
+              likeCount: post.likeCount,
+            ),
+          ),
+        ),
+        child: Image(
+          image: CachedNetworkImageProvider(post.imageUrl),
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
