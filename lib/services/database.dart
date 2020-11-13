@@ -123,4 +123,45 @@ class Database {
 
     return User();
   }
+
+  static void likePost({String currentUserId, Post post}) {
+    DocumentReference postRef =
+        postsRef.doc(post.authorId).collection("userPosts").doc(post.id);
+
+    postRef.get().then((doc) {
+      int likeCount = doc.data()["likeCount"];
+      postRef.update({"likeCount": likeCount + 1});
+      likesRef.doc(post.id).collection("postLikes").doc(currentUserId).set({});
+    });
+  }
+
+  static void unlikePost({String currentUserId, Post post}) {
+    DocumentReference postRef =
+        postsRef.doc(post.authorId).collection("userPosts").doc(post.id);
+
+    postRef.get().then((doc) {
+      int likeCount = doc.data()["likeCount"];
+      postRef.update({"likeCount": likeCount - 1});
+      likesRef
+          .doc(post.id)
+          .collection("postLikes")
+          .doc(currentUserId)
+          .get()
+          .then((doc) {
+        if (doc.exists) {
+          doc.reference.delete();
+        }
+      });
+    });
+  }
+
+  static Future<bool> didLikePost({String currentUserId, Post post}) async {
+    DocumentSnapshot userDoc = await likesRef
+        .doc(post.id)
+        .collection("postLikes")
+        .doc(currentUserId)
+        .get();
+
+    return userDoc.exists;
+  }
 }
