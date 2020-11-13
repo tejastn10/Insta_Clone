@@ -1,3 +1,4 @@
+import 'package:Insta_Clone/models/activity.dart';
 import 'package:Insta_Clone/models/post.dart';
 import 'package:Insta_Clone/models/user.dart';
 import 'package:Insta_Clone/utilities/constants.dart';
@@ -133,6 +134,8 @@ class Database {
       postRef.update({"likeCount": likeCount + 1});
       likesRef.doc(post.id).collection("postLikes").doc(currentUserId).set({});
     });
+
+    addActivityitem(currentUserId: currentUserId, post: post, comment: null);
   }
 
   static void unlikePost({String currentUserId, Post post}) {
@@ -165,12 +168,44 @@ class Database {
     return userDoc.exists;
   }
 
-  static void commentOnPost(
-      {String currentUserID, String postId, String comment}) {
-    commentsRef.doc(postId).collection("postComments").add({
+  static void commentOnPost({String currentUserID, Post post, String comment}) {
+    commentsRef.doc(post.id).collection("postComments").add({
       "content": comment,
       "authorId": currentUserID,
       "timestamp": Timestamp.fromDate(DateTime.now()),
     });
+    addActivityitem(currentUserId: currentUserID, post: post, comment: comment);
+  }
+
+  static void addActivityitem(
+      {String currentUserId, Post post, String comment}) {
+    if (currentUserId != post.authorId) {
+      activitiesRef.doc(post.authorId).collection("useractivities").add({
+        "fromUserId": currentUserId,
+        "postId": post.id,
+        "postImageUrl": post.imageUrl,
+        "comment": comment,
+        "timestamp": Timestamp.fromDate(DateTime.now()),
+      });
+    }
+  }
+
+  static Future<List<Activity>> getActivities(String userId) async {
+    QuerySnapshot userActivitiesSnapshot = await activitiesRef
+        .doc(userId)
+        .collection("userActivities")
+        .orderBy("timestamp", descending: true)
+        .get();
+    List<Activity> activity = userActivitiesSnapshot.docs
+        .map((doc) => Activity.fromDoc(doc))
+        .toList();
+
+    return activity;
+  }
+
+  static Future<Post> getUserPost(String userId, String postId) async {
+    DocumentSnapshot postDocSnapshot =
+        await postsRef.doc(userId).collection("userPosts").doc(postId).get();
+    return Post.fromDoc(postDocSnapshot);
   }
 }
