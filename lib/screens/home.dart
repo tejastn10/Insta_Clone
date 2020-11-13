@@ -1,5 +1,5 @@
 import 'package:Insta_Clone/models/user_data.dart';
-import 'package:Insta_Clone/screens/pages/activity.dart';
+import 'package:Insta_Clone/screens/pages/activities.dart';
 import 'package:Insta_Clone/screens/pages/create_post.dart';
 import 'package:Insta_Clone/screens/pages/feed.dart';
 import 'package:Insta_Clone/screens/pages/profile.dart';
@@ -37,7 +37,7 @@ class _HomeState extends State<Home> {
           ),
           Search(),
           CreatePost(),
-          Activity(),
+          Activities(currentUserId: currentUserId),
           Profile(
             userId: currentUserId,
             currentUserID: currentUserId,
