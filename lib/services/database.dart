@@ -23,7 +23,7 @@ class Database {
     postsRef.doc(post.authorId).collection("userPosts").add({
       "imageUrl": post.imageUrl,
       "caption": post.caption,
-      "likes": post.likes,
+      "likeCount": post.likeCount,
       "authorId": post.authorId,
       "timestamp": post.timestamp,
     });
