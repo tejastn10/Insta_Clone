@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:Insta_Clone/models/post.dart';
 import 'package:Insta_Clone/models/user.dart';
+import 'package:Insta_Clone/screens/extras/comments.dart';
 import 'package:Insta_Clone/screens/pages/profile.dart';
 import 'package:Insta_Clone/services/database.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -168,7 +169,15 @@ class _PostViewState extends State<PostView> {
                   IconButton(
                     icon: Icon(Icons.comment_outlined),
                     iconSize: 30.0,
-                    onPressed: () {},
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => Comments(
+                          postId: widget.post.id,
+                          likeCount: widget.post.likeCount,
+                        ),
+                      ),
+                    ),
                   )
                 ],
               ),
