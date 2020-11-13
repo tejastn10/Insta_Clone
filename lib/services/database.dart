@@ -20,7 +20,7 @@ class Database {
   }
 
   static void createPost(Post post) {
-    postsRef.doc(post.authorId).collection("usersPosts").add({
+    postsRef.doc(post.authorId).collection("userPosts").add({
       "imageUrl": post.imageUrl,
       "caption": post.caption,
       "likes": post.likes,
@@ -104,7 +104,7 @@ class Database {
   static Future<List<Post>> getUserPosts(String userId) async {
     QuerySnapshot userPostSnapshot = await postsRef
         .doc(userId)
-        .collection("usersPosts")
+        .collection("userPosts")
         .orderBy("timestamp", descending: true)
         .get();
 

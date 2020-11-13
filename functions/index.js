@@ -47,7 +47,7 @@ exports.onUnfollowUser = functions
   });
 
 exports.onUploadPost = functions
-  .document("/posts/{userId}/usersPosts/{postId}")
+  .document("/posts/{userId}/userPosts/{postId}")
   .onCreate(async (snapshot, context) => {
     const userId = context.params.userId;
     const postId = context.params.postId;
