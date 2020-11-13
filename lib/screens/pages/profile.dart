@@ -2,6 +2,7 @@ import 'package:Insta_Clone/models/post.dart';
 import 'package:Insta_Clone/models/user.dart';
 import 'package:Insta_Clone/models/user_data.dart';
 import 'package:Insta_Clone/screens/extras/edit_profile.dart';
+import 'package:Insta_Clone/services/auth.dart';
 import 'package:Insta_Clone/services/database.dart';
 import 'package:Insta_Clone/utilities/constants.dart';
 import 'package:Insta_Clone/widgets/post_view.dart';
@@ -336,6 +337,12 @@ class _ProfileState extends State<Profile> {
             fontSize: 35.0,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: Auth.logout,
+          )
+        ],
       ),
       body: FutureBuilder(
         future: usersRef.doc(widget.userId).get(),
