@@ -164,4 +164,13 @@ class Database {
 
     return userDoc.exists;
   }
+
+  static void commentOnPost(
+      {String currentUserID, String postId, String comment}) {
+    commentsRef.doc(postId).collection("postComments").add({
+      "content": comment,
+      "authorId": currentUserID,
+      "timestamp": Timestamp.fromDate(DateTime.now()),
+    });
+  }
 }
